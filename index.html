@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Prova! 💖</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Confetti JS -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+        body {
+            background-color: #0b0710;
+            font-family: 'Poppins', sans-serif;
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        .phone-container {
+            width: 100%;
+            max-width: 400px;
+            height: 100%;
+            max-height: 800px;
+            background: linear-gradient(135deg, #2c0c25 0%, #15081f 100%);
+            position: relative;
+            box-shadow: 0 0 40px rgba(255, 105, 180, 0.2);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 40px 20px;
+            border-radius: 0;
+        }
+        @media(min-width: 450px) {
+            .phone-container {
+                border-radius: 40px;
+                height: 85vh;
+                border: 4px solid #4a1b42;
+            }
+        }
+        .screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+            animation: fadeIn 0.8s ease-in-out;
+            position: relative;
+        }
+        .screen.active {
+            display: flex;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        h1, h2 {
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 15px;
+        }
+        h1 { font-size: 2.2rem; font-weight: 700; color: #ffebf2; }
+        h2 { font-size: 1.8rem; color: #ffb6c1; }
+        p { font-size: 1rem; color: #d8b4e2; margin-bottom: 25px; line-height: 1.5; }
+        
+        .btn {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 65, 108, 0.4);
+            transition: 0.3s;
+            margin-top: 15px;
+        }
+        .btn:hover { transform: scale(1.05); }
+
+        /* Cake Screen */
+        .cake-box {
+            font-size: 5rem;
+            cursor: pointer;
+            margin: 20px 0;
+            transition: 0.3s;
+            position: relative;
+        }
+        .candle {
+            width: 10px;
+            height: 30px;
+            background: #ff6b81;
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 5px;
+        }
+        .flame {
+            width: 14px;
+            height: 20px;
+            background: #ffa502;
+            border-radius: 50% 50% 20% 20%;
+            position: absolute;
+            top: -18px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: flicker 0.5s infinite alternate;
+            box-shadow: 0 0 10px #ffa502;
+        }
+        .flame.off { display: none; }
+        @keyframes flicker {
+            from { transform: translateX(-50%) scale(1); }
+            to { transform: translateX(-50%) scale(1.1); }
+        }
+
+        /* Balloons Screen */
+        .balloons-container {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .balloon {
+            font-size: 3rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .balloon.popped {
+            opacity: 0.2;
+            transform: scale(0.8);
+            pointer-events: none;
+        }
+        .reason-box {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 12px;
+            border-radius: 12px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            border-left: 3px solid #ff416c;
+            text-align: left;
+            display: none;
+        }
+
+        /* Photo Gallery */
+        .polaroid {
+            background: white;
+            padding: 10px 10px 30px 10px;
+            color: #333;
+            border-radius: 4px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            width: 220px;
+            transform: rotate(-3deg);
+            margin-bottom: 20px;
+        }
+        .polaroid img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 2px;
+        }
+        .polaroid p {
+            color: #555;
+            font-size: 0.85rem;
+            margin-top: 10px;
+            margin-bottom: 0;
+        }
+
+        /* Letter Screen */
+        .envelope {
+            font-size: 5rem;
+            cursor: pointer;
+            animation: bounce 1.5s infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .letter-content {
+            background: #fffdf9;
+            color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: left;
+            max-height: 300px;
+            overflow-y: auto;
+            font-size: 0.95rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            display: none;
+        }
+        .letter-content p { color: #444; }
+
+        .footer-credit {
+            font-size: 0.75rem;
+            color: #aaa;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="phone-container">
+    
+    <!-- Screen 1: Welcome -->
+    <div class="screen active" id="screen-0">
+        <p style="font-size: 0.9rem; color: #ffb6c1; text-transform: uppercase; letter-spacing: 2px;">It's officially your day</p>
+        <h1>Happy Birthday,<br>PROVA 🌙❤️</h1>
+        <p style="font-size: 0.85rem; color: #cca5d8;">and somehow, you are 18 already 🎉</p>
+        <button class="btn" onclick="nextScreen(1)">Tap anywhere to continue ➔</button>
+    </div>
+
+    <!-- Screen 2: Cake -->
+    <div class="screen" id="screen-1">
+        <h2>Cake first.<br>Obviously. 🎂</h2>
+        <div class="cake-box" onclick="blowCandle()">
+            <div class="candle" id="candle">
+                <div class="flame" id="flame"></div>
+            </div>
+            🎂
+        </div>
+        <p id="cake-text">Tap the cake & make a wish 🕯️</p>
+        <button class="btn" id="cake-next" style="display:none;" onclick="nextScreen(2)">Keep going ➔</button>
+    </div>
+
+    <!-- Screen 3: Balloons -->
+    <div class="screen" id="screen-2">
+        <h2>Pop the balloons 🎈</h2>
+        <p style="font-size: 0.85rem;">3 reasons are waiting inside. One pop at a time.</p>
+        <div class="balloons-container">
+            <div class="balloon" onclick="popBalloon(1)" id="b1">🎈</div>
+            <div class="balloon" onclick="popBalloon(2)" id="b2">🎈</div>
+            <div class="balloon" onclick="popBalloon(3)" id="b3">🎈</div>
+        </div>
+        <div class="reason-box" id="reason-1"><b>REASON NO. 1:</b> You make ordinary plans feel like something worth looking forward to.</div>
+        <div class="reason-box" id="reason-2"><b>REASON NO. 2:</b> You notice the small things I don't think you're paying attention to.</div>
+        <div class="reason-box" id="reason-3"><b>REASON NO. 3:</b> You call me out when I need it, and I actually appreciate it.</div>
+        <button class="btn" id="balloon-next" style="display:none; margin-top: 10px;" onclick="nextScreen(3)">Keep going ➔</button>
+    </div>
+
+    <!-- Screen 4: Memory -->
+    <div class="screen" id="screen-3">
+        <h2>Remember these? 📷</h2>
+        <div class="polaroid">
+            <!-- এখানে তোমার ছবি বসাতে পারো -->
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=60" alt="Memory">
+            <p>Our favorite memory ✨</p>
+        </div>
+        <button class="btn" onclick="nextScreen(4)">Keep going ➔</button>
+    </div>
+
+    <!-- Screen 5: Letter -->
+    <div class="screen" id="screen-4">
+        <p style="font-size: 0.85rem; color: #ffb6c1;">Before this ends, PR 🌕VA 💖</p>
+        <h2 id="letter-title">A letter from SHOAIB is waiting inside.</h2>
+        <div class="envelope" id="envelope-icon" onclick="openLetter()">💌</div>
+        
+        <div class="letter-content" id="letter-box">
+            <p><b>Dear Prova 🌙❤️,</b></p><br>
+            <p>I was going to write something short and cute, but honestly there's too much I actually want to say — starting with how you make even boring days feel worth showing up for...</p><br>
+            <p>Happy Birthday once again. May all your dreams come true. Always be happy!</p><br>
+            <p style="text-align: right;"><b>— SHOAIB</b></p>
+        </div>
+        <button class="btn" id="letter-next" style="display:none; margin-top: 15px;" onclick="nextScreen(5)">Keep going ➔</button>
+    </div>
+
+    <!-- Screen 6: Final -->
+    <div class="screen" id="screen-5">
+        <h1 style="font-size: 2rem;">HAPPY BIRTHDAY<br>PROVA 🌕💖 !</h1>
+        <div style="font-size: 4rem; margin: 15px 0;">🧸🎁</div>
+        <p style="font-size: 0.85rem; color: #ffb6c1;">Made with love, just for you — SHOAIB ❤️</p>
+    </div>
+
+    <div class="footer-credit" style="text-align: center;">KOIKOI STYLE SURPRISE</div>
+</div>
+
+<script>
+    let currentScreen = 0;
+    let balloonsPopped = 0;
+    const totalScreens = 6;
+
+    function nextScreen(screenNum) {
+        document.getElementById(`screen-${currentScreen}`).classList.remove('active');
+        currentScreen = screenNum;
+        document.getElementById(`screen-${currentScreen}`).classList.add('active');
+        
+        if(screenNum === 5) {
+            confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
+        }
+    }
+
+    function blowCandle() {
+        document.getElementById('flame').classList.add('off');
+        document.getElementById('cake-text').innerText = "Wish sent ✨ Happy Birthday Prova! 💖";
+        document.getElementById('cake-next').style.display = 'inline-block';
+        confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 } });
+    }
+
+    function popBalloon(num) {
+        let balloon = document.getElementById(`b${num}`);
+        if(!balloon.classList.contains('popped')) {
+            balloon.classList.add('popped');
+            balloon.innerText = "💥";
+            document.getElementById(`reason-${num}`).style.display = 'block';
+            balloonsPopped++;
+            if(balloonsPopped === 3) {
+                document.getElementById('balloon-next').style.display = 'inline-block';
+            }
+        }
+    }
+
+    function openLetter() {
+        document.getElementById('envelope-icon').style.display = 'none';
+        document.getElementById('letter-title').style.display = 'none';
+        document.getElementById('letter-box').style.display = 'block';
+        document.getElementById('letter-next').style.display = 'inline-block';
+        confetti({ particleCount: 50, spread: 50 });
+    }
+</script>
+
+</body>
+</html>
